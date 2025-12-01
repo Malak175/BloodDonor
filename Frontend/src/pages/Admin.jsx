@@ -1,116 +1,148 @@
-import { Gauge } from "@mui/x-charts/Gauge";
-import { LineChart } from "@mui/x-charts/LineChart";
-import { FaUser } from "react-icons/fa";
-import { PieChart } from "@mui/x-charts/PieChart";
-import { useEffect, useState } from "react";
-import { publicRequest } from "../requestMethod";
-import {logout } from "../redux/userRedux" 
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
-
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import Menu from "../components/Menu"; // لو عندك
 
 function Admin() {
-  const [bloodGroupData, setBloodGroupData] = useState([]);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
 
+  const [latestDonors, setLatestDonors] = useState([]);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [approvedCount, setApprovedCount] = useState(0);
+
+  // جلب آخر 5 متبرعين
   useEffect(() => {
-    const getBloodGroupStats = async() => {
+    const fetchLatestDonors = async () => {
       try {
-        const res = await publicRequest.get("/donors/stats");
-          
-        const transformedData = res.data.map((item, index) => ({
-          id: index,
-          value: item.count,
-          label: `Blood Group ${item._id}`,
-        }));
+        const res = await axios.get("/api/auth/donors", {
+          headers: {
+            Authorization: `Bearer ${currentUser.accessToken}`,
+          },
+        });
 
-        setBloodGroupData(transformedData);
-      } catch (error) {
-        console.log(error);
+        // آخر 5
+        const lastFive = res.data.slice(-5).reverse();
+        setLatestDonors(lastFive);
+
+        // حساب الكروت
+        const pending = lastFive.filter(d => d.status === 'pending').length;
+        const approved = lastFive.filter(d => d.status === 'approve').length;
+
+        setPendingCount(pending);
+        setApprovedCount(approved);
+
+      } catch (err) {
+        console.log(err);
       }
     };
 
-    getBloodGroupStats();
-  }, []);
+    fetchLatestDonors();
+  }, [currentUser]);
 
-const handleLogout = () =>{
-dispatch(logout());
-navigate("/login");
-};
   return (
-    <div className='flex justify-between h-[100vh]'>
-      <div className='flex flex-col'>
-        <div className='flex flex-wrap'>
-          <div className='bg-gray-50 m-[30px] h-[300px] w-[350px] shadow-xl'>
-            <div className='h-[200px] w-[200px]'>
-              <Gauge
-                value={75}
-                startAngle={0}
-                endAngle={360}
-                innerRadius="80%"
-                outerRadius="100%"
-              // ...
-              />
-            </div>
-            <h2 className='font-semibold text-[18px] m-[40px]'>Prospects</h2>
-          </div>
-          <div className='bg-gray-50 m-[30px] h-[300px] w-[350px] shadow-xl'>
-            <div className='h-[200px] w-[200px] m-[30px] border-[20px] border-red-400 border-solid
-            rounded-full'>
-              <div className='flex items-center justify-center m-[30px]'>
-                <h2 className='font-semibold text-[18px] m-[40px]'>100</h2>
+    <div className="flex bg-gray-100 min-h-screen">
+      
+      {/* المحتوى الرئيسي */}
+      <div className="flex-1 p-8 overflow-y-auto">
+        {/* Top Bar */}
+        <div className="flex justify-between items-center mb-10">
+          <h1 className="text-3xl font-bold text-black">Dashboard</h1>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 cursor-pointer">
+              <div>
+                <p className="font-semibold text-black">Admin</p>
+                <p className="text-sm text-gray-600">Administrator</p>
               </div>
-              <h2 className='font-semibold text-[18px] m-[40px]'>Donors</h2>
-
             </div>
           </div>
         </div>
-        <div>
-          <LineChart
-            xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-            series={[
-              {
-                data: [2, -5.5, 2, -7.5, 1.5, 6],
-                area: true,
-                baseline: 'min',
-              },
-            ]}
-            height={300}
-          />
-        </div>
-      </div>
-      <div className='flex flex-col bg-gray-100 m-[20px] h-[700px] w-[300px]
-      shadow-xl'>
-        <div className='flex items-center justify-center m-[20px] cursor-pointer'>
-          <FaUser />
-          <span className='ml-[10px] font-semibold' onClick={handleLogout}>Logout</span>
-        </div>
-        <div className='flex flex-col items-center justify-center mt-[10px]'>
-          <h2 className='font-bold'>Recent Donors</h2>
-          <ul>
-            <li>1.James Lisley</li>
-            <li>2.Joel Lisplen</li>
-            <li>3.James Lisley</li>
 
-          </ul>
+        {/* GRID SECTION */}
+        <div className="grid grid-cols-3 gap-6 mb-10">
+          {/* CARD 1 - Requested */}
+          <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h2 className="font-semibold text-black mb-4">Requested</h2>
+            <div className="flex justify-center">
+              <div className="w-24 h-24 rounded-full border-[8px] border-red-500 flex items-center justify-center">
+                <span className="text-xl font-bold text-black">{pendingCount}</span>
+              </div>
+            </div>
+            <p className="text-center text-gray-600 mt-4">Total Pending</p>
+          </div>
+
+          {/* CARD 2 - Received */}
+          <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h2 className="font-semibold text-black mb-4">Received</h2>
+            <div className="flex justify-center">
+              <div className="w-24 h-24 rounded-full border-[8px] border-red-400 flex items-center justify-center">
+                <span className="text-xl font-bold text-black">{approvedCount}</span>
+              </div>
+            </div>
+            <p className="text-center text-gray-600 mt-4">Total Approved</p>
+          </div>
+
+          {/* CARD 3 - Unit Status */}
+          <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h2 className="font-semibold text-black mb-4">Unit Status</h2>
+            <div className="grid grid-cols-4 gap-3">
+              {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((t) => (
+                <div
+                  key={t}
+                  className="bg-red-100 text-red-600 font-semibold text-center py-2 rounded-lg"
+                >
+                  {t}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <PieChart
-          series={[
-            {
-              data: [
-                { id: 0, value: 10, label: 'series A' },
-                { id: 1, value: 15, label: 'series B' },
-                { id: 2, value: 20, label: 'series C' },
-              ],
-            },
-          ]}
-          width={200}
-          height={200}
-        />
+
+        {/* Row 2: Donors + Map */}
+        <div className="grid grid-cols-2 gap-8">
+          {/* RECENT DONORS */}
+          <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h2 className="font-semibold text-black mb-4">Recent Donors</h2>
+
+            <div className="space-y-4">
+              {latestDonors.map((donor) => (
+                <div
+                  key={donor._id}
+                  className="bg-gray-50 p-4 rounded-xl flex items-center justify-between shadow-sm"
+                >
+                  <div>
+                    <p className="font-semibold text-black">{donor.name}</p>
+                    <p className="text-sm text-gray-600">{donor.type}</p>
+                  </div>
+
+                  <span className="bg-red-500 text-white px-3 py-1 rounded-lg font-semibold text-sm">
+                    New
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* MAP SECTION */}
+          <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h2 className="font-semibold text-black mb-4">Track Nearby Donors</h2>
+
+            {/* Map placeholder */}
+            <div className="bg-gray-300 w-full h-[300px] rounded-xl flex items-center justify-center text-gray-700">
+              Map coming soon
+            </div>
+
+            <div className="mt-6">
+              <label className="font-semibold text-black">Set Distance</label>
+              <input type="range" min="1" max="50" className="w-full mt-2" />
+              <button className="mt-4 w-full bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition">
+                Send Request
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Admin
+export default Admin;

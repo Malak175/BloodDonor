@@ -1,12 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { loginStart, loginSuccess, loginFailure } from "../redux/userRedux";
 
 const Login = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,6 +21,7 @@ const Login = () => {
     }
 
     setIsLoading(true);
+    dispatch(loginStart());
 
     try {
       const res = await fetch("http://localhost:8000/api/auth/login", {
@@ -32,24 +37,30 @@ const Login = () => {
       if (!res.ok) {
         toast.error(data.message || "Invalid email or password");
         setIsLoading(false);
+        dispatch(loginFailure());
         return;
       }
 
-      // Save token and user data
+      // Store in localStorage (optional — good for persistence)
       localStorage.setItem("token", data.accessToken);
       localStorage.setItem("user", JSON.stringify(data));
+
+      // Update Redux state
+      dispatch(loginSuccess(data));
 
       toast.success("Login successful!");
 
       // Redirect based on role
       if (data.role === "admin") {
-        navigate("/admin/dashboard", { replace: true });
+        navigate("/admin", { replace: true });
       } else {
-        navigate("/profile", { replace: true });
+        navigate("/dashboard", { replace: true });
       }
+
     } catch (err) {
       console.error("Login error:", err);
       toast.error("Server error. Please try again later.");
+      dispatch(loginFailure());
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +71,8 @@ const Login = () => {
       <Toaster position="top-center" />
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-white flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2">
-          {/* Left Side - Image */}
+
+          {/* Left Side */}
           <div
             className="hidden lg:flex items-center justify-center bg-cover bg-center relative"
             style={{
@@ -121,6 +133,7 @@ const Login = () => {
               </Link>
             </p>
           </div>
+
         </div>
       </div>
     </>
