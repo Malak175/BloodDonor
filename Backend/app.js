@@ -19,4 +19,18 @@ app.get("/", (req, res) => {
   res.send("Blood Bridge Backend is running perfectly!");
 });
 
+const prospectRoutes = require("./routes/prospect");
+
+app.use("/api/prospect", prospectRoutes);
+
+
+const donorRoutes = require("./routes/donor");
+app.use("/api/donor", donorRoutes);
+
+
+
+
+
+
+
 module.exports = app;

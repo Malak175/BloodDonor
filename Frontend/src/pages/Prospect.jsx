@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { publicRequest } from "../requestMethod";
 
-
-
 const Prospect = () => {
   const location = useLocation();
   const prospectId = location.pathname.split("/")[3];
@@ -13,10 +11,10 @@ const Prospect = () => {
   useEffect(() => {
     const getProspect = async () => {
       try {
-        const res = await publicRequest.get(`/prospect/find/${prospectId}`);
+        const res = await publicRequest.get(`/prospect/${prospectId}`);
         setProspect(res.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     getProspect();
@@ -24,67 +22,60 @@ const Prospect = () => {
 
   const approveProspect = async () => {
     try {
-      await publicRequest.post("/donors", {
+      await publicRequest.post("/donor", {
         name: prospect.name,
         address: prospect.address,
-        email:prospect.email,
+        email: prospect.email,
         tel: prospect.tel,
-        bloodgroup:prospect.bloodgroup,
+        bloodgroup: prospect.bloodgroup,
         diseases: prospect.diseases,
-        date: prospect.date,
         weight: prospect.weight,
       });
       await publicRequest.delete(`/prospect/${prospectId}`);
-      navigate('/admin/donors');
+      navigate("/admin/donors");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="m-[20px] h-[80vh] w-[450px] shadow-lg">
-        <h2 className="font-semibold m-[30px]">Prospect</h2>
-        <ul className="m-[30px]">
-          <li className="mt-[10px]">
-            <strong className="font-semibold">Name:</strong> {prospect.name}
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-red-50 to-white p-6">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 transition-transform transform hover:scale-105 duration-300">
+        <h2 className="text-2xl font-bold text-red-700 text-center mb-6">Prospect Details</h2>
+        
+        <ul className="space-y-3 text-gray-700">
+          <li>
+            <span className="font-semibold text-gray-800">Name:</span> {prospect.name || "-"}
           </li>
-          <li className="mt-[10px]">
-            <strong className="font-semibold">Address:</strong>
-            {prospect.address}
+          <li>
+            <span className="font-semibold text-gray-800">Address:</span> {prospect.address || "-"}
           </li>
-          <li className="mt-[10px]">
-            <strong className="font-semibold">Tel:</strong>
-            {prospect.tel}
+          <li>
+            <span className="font-semibold text-gray-800">Tel:</span> {prospect.tel || "-"}
           </li>
-          <li className="mt-[5px]">
-            <strong className="font-semibold">Blood Type:</strong>
-            {prospect.bloodgroup}
+          <li>
+            <span className="font-semibold text-gray-800">Blood Type:</span> {prospect.bloodgroup || "-"}
           </li>
-          <li className="mt-[5px]">
-            <strong className="font-semibold">Disease:</strong>
-            {prospect.diseases}
+          <li>
+            <span className="font-semibold text-gray-800">Disease:</span> {prospect.diseases || "None"}
           </li>
-          <li className="mt-[5px]">
-            <strong className="font-semibold">Date:</strong>
-            {prospect.date}
+          <li>
+            <span className="font-semibold text-gray-800">Weight:</span> {prospect.weight ? `${prospect.weight} Kg` : "-"}
           </li>
-          <li className="mt-[5px]">
-            <strong className="font-semibold">Weight:</strong>
-            {prospect.weight}Kg
-          </li>
-          <li className="mt-[5px]">
-            <strong className="font-semibold">Status:</strong>pending
+          <li>
+            <span className="font-semibold text-gray-800">Status:</span> <span className="text-yellow-500 font-semibold">Pending</span>
           </li>
         </ul>
-        <span className="block m-[10px]">
-          Do you want to approve James to a donor?
-        </span>
+
+        <p className="mt-6 text-center text-gray-600">
+          Do you want to approve this prospect to a donor?
+        </p>
+
         <button
-          className="bg-red-400 text-white cursor-pointer p-[5px] w-[150px] m-[10px]"
+          className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition-colors duration-300"
           onClick={approveProspect}
         >
-          Approve
+          Approve Prospect
         </button>
       </div>
     </div>

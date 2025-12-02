@@ -14,7 +14,7 @@ function Admin() {
   useEffect(() => {
     const fetchLatestDonors = async () => {
       try {
-        const res = await axios.get("/api/auth/donors", {
+        const res = await axios.get("/api/prospect", {
           headers: {
             Authorization: `Bearer ${currentUser.accessToken}`,
           },

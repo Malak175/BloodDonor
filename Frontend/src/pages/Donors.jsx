@@ -7,35 +7,31 @@ import { publicRequest } from "../requestMethod";
 const Donors = () => {
   const [donors, setDonors] = useState([]);
 
- 
   useEffect(() => {
     const getAllDonors = async () => {
       try {
-        const res = await publicRequest.get("/donors");
-       
+        const res = await publicRequest.get("/donor");
         const dataWithId = res.data.map((d, index) => ({
           ...d,
           _id: d._id || d.id || index + 1,
         }));
         setDonors(dataWithId);
       } catch (error) {
-        console.log( error);
+        console.log(error);
       }
     };
     getAllDonors();
   }, []);
 
-  
   const handleDelete = async (id) => {
     try {
-      await publicRequest.delete(`/donors/${id}`);
+      await publicRequest.delete(`/donor/find/${id}`);
       setDonors((prev) => prev.filter((donor) => donor._id !== id));
     } catch (error) {
-      console.log( error);
+      console.log(error);
     }
   };
 
- 
   const columns = [
     { field: "_id", headerName: "ID", width: 90 },
     { field: "name", headerName: "Name", width: 150 },
@@ -49,7 +45,7 @@ const Donors = () => {
       width: 100,
       renderCell: (params) => (
         <Link to={`/admin/donor/${params.row._id}`}>
-          <button className="bg-gray-400 text-white px-3 py-1 rounded">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition duration-300 shadow-md transform hover:scale-105">
             Edit
           </button>
         </Link>
@@ -61,35 +57,50 @@ const Donors = () => {
       width: 100,
       renderCell: (params) => (
         <FaTrash
-          className="text-red-500 cursor-pointer m-2"
+          className="text-red-500 hover:text-red-700 cursor-pointer transition duration-300 transform hover:scale-110"
           onClick={() => handleDelete(params.row._id)}
         />
       ),
     },
   ];
 
-
   return (
-    <div className="w-[70vw]">
-      <div className="flex items-center justify-between m-[30px]">
-        <h1 className="m-[20px] text-[20px] font-semibold">All Donors</h1>
+    <div className="flex justify-center bg-gradient-to-b from-red-50 to-white min-h-screen p-10">
+      <div className="w-[70vw] bg-white rounded-3xl shadow-2xl p-6 md:p-8">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold ">All Donors</h1>
+          <Link to="/admin/newdonor">
+            <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-2xl shadow-md transition-all duration-300 transform hover:scale-105">
+              New Donor
+            </button>
+          </Link>
+        </div>
 
-        <Link to="/admin/newdonor">
-          <button className="bg-[#1e1e1e] text-white p-[10px] rounded cursor-pointer">
-            New Donor
-          </button>
-        </Link>
-      </div>
-
-      <div className="mx-[30px] bg-white p-4 shadow-md rounded-lg">
-        <DataGrid
-          rows={donors || []}
-          columns={columns}
-          checkboxSelection
-          getRowId={(row) => row._id || row.id || Math.random()}
-          pageSize={5}
-          autoHeight
-        />
+        <div className="bg-white p-4 shadow-lg rounded-xl">
+          <DataGrid
+            rows={donors || []}
+            columns={columns}
+            checkboxSelection
+            getRowId={(row) => row._id || row.id || Math.random()}
+            pageSize={5}
+            autoHeight
+            sx={{
+              border: "none",
+              "& .MuiDataGrid-cell": { borderBottom: "1px solid #f0f0f0" },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#fee2e2",
+                color: "#b91c1c",
+                fontWeight: "bold",
+                fontSize: 16,
+              },
+              "& .MuiDataGrid-row:hover": { backgroundColor: "#ffe4e6" },
+              "& .MuiCheckbox-root": { color: "#b91c1c" },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: "white",
+              },
+            }}
+          />
+        </div>
       </div>
     </div>
   );

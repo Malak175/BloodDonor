@@ -2,85 +2,71 @@ import { useState } from "react";
 import { publicRequest } from "../requestMethod";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
 
 const NewDonor = () => {
   const [inputs, setInputs] = useState({});
-  const user = useSelector((state) => state.user);
-
-  
 
   const handleChange = (e) => {
-    setInputs((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-   const handleDonors = async () => {
+  const handleDonors = async () => {
     try {
-         if (
-    !inputs.name ||
-    !inputs.address ||
-    !inputs.tel ||
-    !inputs.bloodgroup ||
-    !inputs.email ||
-    !inputs.weight ||
-    !inputs.date
-  ) {
-    toast.warning("Please fill all required fields.");
-    return;
-  }
-  await publicRequest.post("/donors", inputs);
-  toast.success("You have been successfully saved to the database.");
-  setInputs({});
-} catch (error) {
-  toast.warning("Make sure you have filled all fields.");
+      if (
+        !inputs.name ||
+        !inputs.address ||
+        !inputs.tel ||
+        !inputs.bloodgroup ||
+        !inputs.email ||
+        !inputs.weight ||
+        !inputs.date
+      ) {
+        toast.warning("Please fill all required fields.");
+        return;
+      }
+      await publicRequest.post("/donor", inputs);
+      toast.success("Donor successfully created!");
+      setInputs({});
+    } catch (error) {
+      toast.error("Failed to create donor. Please check all fields.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="m-[20px] p-[20px] h-[80vh] w-[450px]">
-        <h2 className="font-semibold">New Donor</h2>
-
-        <div className="flex flex-col my-[12px]">
-          <label htmlFor="">Name</label>
+    <div className="flex justify-center items-start min-h-screen bg-gradient-to-b from-red-50 to-white p-10">
+      {/* Left Box */}
+      <div className="w-[450px] bg-white shadow-2xl rounded-3xl p-6 md:p-8 mr-5">
+        <h2 className="text-2xl font-bold text-red-600 mb-6">New Donor</h2>
+        <div className="flex flex-col space-y-4">
           <input
             type="text"
-            placeholder="James Doe"
             name="name"
+            placeholder="Name"
             value={inputs.name || ""}
             onChange={handleChange}
-            className="border-[#555] border-2 border-solid p-[10px] w-[300px]"
+            className="border-2 border-gray-300 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400 transition"
           />
-          <label htmlFor="">Address</label>
           <input
             type="text"
-            placeholder="123 DownTown, Sydney"
             name="address"
+            placeholder="Address"
             value={inputs.address || ""}
             onChange={handleChange}
-            className="border-[#555] border-2 border-solid p-[10px] w-[300px]"
+            className="border-2 border-gray-300 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400 transition"
           />
-
-          <label htmlFor="">Tel</label>
           <input
-            type="Number"
-            placeholder="(026) 272 839"
+            type="tel"
             name="tel"
+            placeholder="Telephone"
             value={inputs.tel || ""}
             onChange={handleChange}
-            className="border-[#555] border-2 border-solid p-[10px] w-[300px]"
+            className="border-2 border-gray-300 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400 transition"
           />
-
-          <label htmlFor="" className="text=[18px] mt-[10px] font-semibold">
-            Blood Group
-          </label>
           <select
-            className="border-[#555] border-2 border-solid p-[10px] w-[300px]"
             name="bloodgroup"
             value={inputs.bloodgroup || ""}
             onChange={handleChange}
+            className="border-2 border-gray-300 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400 transition"
           >
             <option value="">Select Blood Group</option>
             <option value="A+">A+</option>
@@ -92,59 +78,53 @@ const NewDonor = () => {
             <option value="O+">O+</option>
             <option value="O-">O-</option>
           </select>
-
-          <label htmlFor="">Email</label>
           <input
-            type="text"
-            placeholder="janedoe@example.com"
+            type="email"
             name="email"
+            placeholder="Email"
             value={inputs.email || ""}
             onChange={handleChange}
-            className="border-[#555] border-2 border-solid p-[10px] w-[300px]"
+            className="border-2 border-gray-300 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400 transition"
           />
         </div>
       </div>
 
-      <div className="m-[20px] p-[20px] h-[80vh] w-[450px]">
-        <div className="flex flex-col">
-          <label htmlFor="">Weight</label>
+      {/* Right Box */}
+      <div className="w-[450px] bg-white shadow-2xl rounded-3xl p-6 md:p-8 ml-5">
+        <div className="flex flex-col space-y-4">
           <input
             type="number"
-            placeholder="50kg"
             name="weight"
+            placeholder="Weight (kg)"
             value={inputs.weight || ""}
             onChange={handleChange}
-            className="border-[#555] border-2 border-solid p-[10px] w-[300px]"
+            className="border-2 border-gray-300 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400 transition"
           />
-          <label htmlFor="">Date</label>
           <input
             type="date"
-            placeholder="2024/07/29"
             name="date"
             value={inputs.date || ""}
             onChange={handleChange}
-            className="border-[#555] border-2 border-solid p-[10px] w-[300px]"
+            className="border-2 border-gray-300 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400 transition"
           />
-
-          <label htmlFor="">Do you have any diseases?</label>
           <textarea
-            type="Number"
             name="diseases"
             value={inputs.diseases || ""}
             onChange={handleChange}
-            className="border-[#555] border-2 border-solid p-[10px] w-[300px]"
-            placeholder="N/A"
+            placeholder="Any diseases?"
+            className="border-2 border-gray-300 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400 transition resize-none"
+            rows={3}
           />
-
           <button
-            className="bg-[#444] cursor-pointer text-white p-[10px] w-[300px] my-[10px]"
             onClick={handleDonors}
+            className="bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold shadow-lg transition transform hover:scale-105"
           >
-            Create
+            Create Donor
           </button>
-          <ToastContainer />
         </div>
       </div>
+
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

@@ -10,7 +10,8 @@ const {
   getPendingUsers, 
   getAllDonors, 
   approveUser, 
-  rejectUser 
+  rejectUser ,
+
 } = require("../controllers/userController");
 
 const { verifyTokenAndAdmin } = require("../middleware/verifyToken");
@@ -25,5 +26,6 @@ router.get("/pending-users", verifyTokenAndAdmin, getPendingUsers);
 router.get("/donors", verifyTokenAndAdmin, getAllDonors);        // اختياري
 router.put("/approve/:id", verifyTokenAndAdmin, approveUser);
 router.delete("/reject/:id", verifyTokenAndAdmin, rejectUser);
+
 
 module.exports = router;

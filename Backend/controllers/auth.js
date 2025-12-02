@@ -23,7 +23,7 @@ const registerUser = async (req, res) => {
       bloodgroup: req.body.bloodgroup,
       weight: req.body.weight,
       lastDonationDate: req.body.lastDonationDate || null,
-      diseases: req.body.diseases || [],
+      diseases: req.body.diseases || "None",
       age: req.body.age,
       bloodpressure: req.body.bloodpressure,
       gender: req.body.gender,
