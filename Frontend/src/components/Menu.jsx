@@ -15,7 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userRedux";
 import { persistor } from "../redux/store";
 
-function Menu() {
+function Menu({ onNavigate }) {
+  // onNavigate optional prop (used if parent wants to close sidebar after navigation)
   const [activeLink, setActiveLink] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,115 +31,139 @@ function Menu() {
 
   const handleActiveLink = (link) => {
     setActiveLink(link);
+    if (typeof onNavigate === "function") onNavigate();
   };
 
-  // إذا ماكانش فيه يوزر مسجل دخول
   if (!currentUser) {
     return null;
   }
 
-  // عدد الإشعارات الغير مقروءة
   const unreadCount = currentUser.notifications?.filter(n => !n.read).length || 0;
 
   return (
-    <div className='p-[20px] w-[350px] bg-gray-100 shadow-lg min-h-screen'>
-      <div className='mt-[20px] pl-[20px]'>
-        <h2 className='text-2xl font-bold text-red-600 mb-6'>
+    <nav
+      className="w-full md:w-72 bg-white md:bg-white/90 shadow-sm md:shadow-none min-h-screen
+                 p-4 md:p-6 flex flex-col"
+      aria-label="Main sidebar"
+    >
+      <div className="mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-red-600">
           {currentUser.role === "admin" ? "Admin Panel" : "Donor Dashboard"}
         </h2>
       </div>
 
-      <ul className='flex flex-col items-start justify-start mt-[10px] pl-[20px]'>
+      <ul className="flex-1 flex flex-col gap-3">
+        <li>
+          <Link
+            to={currentUser.role === "admin" ? "/admin" : "/dashboard"}
+            onClick={() => handleActiveLink(currentUser.role === "admin" ? "/admin" : "/dashboard")}
+            className={`flex items-center text-base md:text-lg font-semibold px-3 py-2 rounded-lg transition-colors
+              ${activeLink === (currentUser.role === "admin" ? "/admin" : "/dashboard") ? "bg-red-500 text-white" : "text-gray-700 hover:text-red-600 hover:bg-red-50"}`}
+          >
+            <FaHome className="mr-3" /> Home
+          </Link>
+        </li>
 
-        {/* ===== روابط مشتركة ===== */}
-        <Link 
-          to={currentUser.role === "admin" ? "/admin" : "/dashboard"} 
-          onClick={() => handleActiveLink(currentUser.role === "admin" ? "/admin" : "/dashboard")}
-        >
-          <li className={`flex items-center text-[20px] cursor-pointer mt-[20px] font-semibold transition-all duration-200
-            ${activeLink === (currentUser.role === "admin" ? "/admin" : "/dashboard") ? "bg-red-500 text-white p-[12px] rounded-lg shadow-md" : "text-gray-700 hover:text-red-600"}`}>
-            <FaHome className="mr-[15px]" /> Home
-          </li>
-        </Link>
-
-        {/* ===== روابط الـ Admin فقط ===== */}
         {currentUser.role === "admin" && (
           <>
-            <Link to="/admin/donors" onClick={() => handleActiveLink("/admin/donors")}>
-              <li className={`flex items-center text-[20px] cursor-pointer mt-[20px] font-semibold transition-all
-                ${activeLink === "/admin/donors" ? "bg-red-500 text-white p-[12px] rounded-lg shadow-md" : "text-gray-700 hover:text-red-600"}`}>
-                <FaBox className="mr-[15px]" /> Donors
-              </li>
-            </Link>
+            <li>
+              <Link
+                to="/admin/donors"
+                onClick={() => handleActiveLink("/admin/donors")}
+                className={`flex items-center text-base md:text-lg font-semibold px-3 py-2 rounded-lg transition-colors
+                  ${activeLink === "/admin/donors" ? "bg-red-500 text-white" : "text-gray-700 hover:text-red-600 hover:bg-red-50"}`}
+              >
+                <FaBox className="mr-3" /> Donors
+              </Link>
+            </li>
 
-            <Link to="/admin/prospects" onClick={() => handleActiveLink("/admin/prospects")}>
-              <li className={`flex items-center text-[20px] cursor-pointer mt-[20px] font-semibold transition-all
-                ${activeLink === "/admin/prospects" ? "bg-red-500 text-white p-[12px] rounded-lg shadow-md" : "text-gray-700 hover:text-red-600"}`}>
-                <FaUsers className="mr-[15px]" /> Prospects
-              </li>
-            </Link>
+            <li>
+              <Link
+                to="/admin/prospects"
+                onClick={() => handleActiveLink("/admin/prospects")}
+                className={`flex items-center text-base md:text-lg font-semibold px-3 py-2 rounded-lg transition-colors
+                  ${activeLink === "/admin/prospects" ? "bg-red-500 text-white" : "text-gray-700 hover:text-red-600 hover:bg-red-50"}`}
+              >
+                <FaUsers className="mr-3" /> Prospects
+              </Link>
+            </li>
 
-            <Link to="/admin/pending-users" onClick={() => handleActiveLink("/admin/pending-users")}>
-              <li className={`flex items-center text-[20px] cursor-pointer mt-[20px] font-semibold transition-all
-                ${activeLink === "/admin/pending-users" ? "bg-red-500 text-white p-[12px] rounded-lg shadow-md" : "text-gray-700 hover:text-red-600"}`}>
-                <FaUserCheck className="mr-[15px]" /> Pending Registrations
-              </li>
-            </Link>
+            <li>
+              <Link
+                to="/admin/pending-users"
+                onClick={() => handleActiveLink("/admin/pending-users")}
+                className={`flex items-center text-base md:text-lg font-semibold px-3 py-2 rounded-lg transition-colors
+                  ${activeLink === "/admin/pending-users" ? "bg-red-500 text-white" : "text-gray-700 hover:text-red-600 hover:bg-red-50"}`}
+              >
+                <FaUserCheck className="mr-3" /> Pending Registrations
+              </Link>
+            </li>
           </>
         )}
 
-        {/* ===== روابط الـ Donor العادي فقط ===== */}
         {currentUser.role !== "admin" && (
           <>
-            <Link to="/dashboard/profile" onClick={() => handleActiveLink("/dashboard/profile")}>
-              <li className={`flex items-center text-[20px] cursor-pointer mt-[20px] font-semibold transition-all
-                ${activeLink === "/dashboard/profile" ? "bg-red-500 text-white p-[12px] rounded-lg shadow-md" : "text-gray-700 hover:text-red-600"}`}>
-                <FaUser className="mr-[15px]" /> My Profile
-              </li>
-            </Link>
+            <li>
+              <Link
+                to="/dashboard/profile"
+                onClick={() => handleActiveLink("/dashboard/profile")}
+                className={`flex items-center text-base md:text-lg font-semibold px-3 py-2 rounded-lg transition-colors
+                  ${activeLink === "/dashboard/profile" ? "bg-red-500 text-white" : "text-gray-700 hover:text-red-600 hover:bg-red-50"}`}
+              >
+                <FaUser className="mr-3" /> My Profile
+              </Link>
+            </li>
 
-            <Link to="/dashboard/notifications" onClick={() => handleActiveLink("/dashboard/notifications")}>
-              <li className={`flex items-center text-[20px] cursor-pointer mt-[20px] font-semibold transition-all relative
-                ${activeLink === "/dashboard/notifications" ? "bg-red-500 text-white p-[12px] rounded-lg shadow-md" : "text-gray-700 hover:text-red-600"}`}>
-                <FaBell className="mr-[15px]" /> Notifications
+            <li className="relative">
+              <Link
+                to="/dashboard/notifications"
+                onClick={() => handleActiveLink("/dashboard/notifications")}
+                className={`flex items-center text-base md:text-lg font-semibold px-3 py-2 rounded-lg transition-colors
+                  ${activeLink === "/dashboard/notifications" ? "bg-red-500 text-white" : "text-gray-700 hover:text-red-600 hover:bg-red-50"}`}
+              >
+                <FaBell className="mr-3" /> Notifications
                 {unreadCount > 0 && (
-                  <span className="absolute -top-2 -right-3 bg-red-600 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">
-                    {unreadCount}
+                  // badge responsive position: uses relative parent and small size on mobile
+                  <span className="ml-2 md:ml-3 inline-flex items-center justify-center text-xs md:text-sm font-bold
+                                   bg-red-600 text-white rounded-full h-5 w-5 md:h-6 md:w-6">
+                    {unreadCount > 99 ? "99+" : unreadCount}
                   </span>
                 )}
-              </li>
-            </Link>
+              </Link>
+            </li>
 
-            <Link to="/dashboard/donations" onClick={() => handleActiveLink("/dashboard/donations")}>
-              <li className={`flex items-center text-[20px] cursor-pointer mt-[20px] font-semibold transition-all
-                ${activeLink === "/dashboard/donations" ? "bg-red-500 text-white p-[12px] rounded-lg shadow-md" : "text-gray-700 hover:text-red-600"}`}>
-                <FaHeart className="mr-[15px]" /> My Donations
-              </li>
-            </Link>
+            <li>
+              <Link
+                to="/dashboard/donations"
+                onClick={() => handleActiveLink("/dashboard/donations")}
+                className={`flex items-center text-base md:text-lg font-semibold px-3 py-2 rounded-lg transition-colors
+                  ${activeLink === "/dashboard/donations" ? "bg-red-500 text-white" : "text-gray-700 hover:text-red-600 hover:bg-red-50"}`}
+              >
+                <FaHeart className="mr-3" /> My Donations
+              </Link>
+            </li>
           </>
         )}
+      </ul>
 
-        <hr className='w-full border-gray-300 my-[30px]' />
-
-        {/* Logout */}
+      <div className="mt-4 flex flex-col gap-3">
         <button
           onClick={handleLogout}
-          className="flex items-center text-[20px] cursor-pointer mt-[30px] font-semibold text-red-600 
-            hover:bg-red-200 w-full p-[12px] rounded-lg transition"
+          className="flex items-center justify-center gap-3 text-base md:text-lg font-semibold py-2 rounded-lg
+                     bg-red-50 hover:bg-red-100 text-red-600"
         >
-          <FaSignOutAlt className="mr-[15px]" /> Logout
+          <FaSignOutAlt /> Logout
         </button>
 
-        {/* Back to Home */}
         <button
           onClick={() => navigate('/')}
-          className="flex items-center text-[20px] cursor-pointer mt-[20px] font-semibold text-gray-600 
-            hover:bg-gray-200 w-full p-[12px] rounded-lg transition"
+          className="flex items-center justify-center gap-3 text-base md:text-lg font-semibold py-2 rounded-lg
+                     bg-gray-50 hover:bg-gray-100 text-gray-700"
         >
-          <FaArrowLeft className="mr-[15px]" /> Back to Home
+          <FaArrowLeft /> Back to Home
         </button>
-      </ul>
-    </div>
+      </div>
+    </nav>
   );
 }
 
