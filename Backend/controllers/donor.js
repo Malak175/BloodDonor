@@ -1,7 +1,6 @@
 const Donor = require("../models/Donor");
 
 
-// GET all donors
 const getAllDonors = async (req, res) => {
   try { const donors = await Donor.find();
     res.status(200).json(donors);
@@ -11,7 +10,7 @@ const getAllDonors = async (req, res) => {
   }
 };
 
-// ADD new donor
+
 const addDonor = async (req, res) => {
   try { const newDonor = new Donor(req.body);
     const savedDonor = await newDonor.save();

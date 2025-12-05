@@ -1,6 +1,5 @@
 const Prospect = require("../models/Prospect");
 
-// GET all prospects
 const getAllProspects = async (req, res) => {
   try {
     const prospects = await Prospect.find();
@@ -11,7 +10,7 @@ const getAllProspects = async (req, res) => {
   }
 };
 
-// ADD new prospect
+
 const addProspect = async (req, res) => {
   try {
     const newProspect = new Prospect(req.body);
@@ -23,7 +22,6 @@ const addProspect = async (req, res) => {
   }
 };
 
-// DELETE a prospect
 const deleteProspect = async (req, res) => {
   try {
     await Prospect.findByIdAndDelete(req.params.id);

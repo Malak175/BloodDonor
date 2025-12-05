@@ -5,7 +5,7 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-// Register a new user (donors only - pending approval)
+
 const registerUser = async (req, res) => {
   try {
     const hashedPassword = CryptoJS.AES.encrypt(
@@ -45,7 +45,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-// Login user (Admin & Approved Users)
+
 const loginUser = async (req, res) => {
   try {
     console.log("Login attempt with email:", req.body.email);
@@ -56,7 +56,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Decrypt password
+   
     const hashedPassword = CryptoJS.AES.decrypt(user.password, process.env.PASS_SEC);
     const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
@@ -65,7 +65,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Generate JWT Token
+  
     const accessToken = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SEC,
@@ -86,7 +86,6 @@ const loginUser = async (req, res) => {
   }
 };
 
-// Forgot Password - Send Reset Link
 const forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
