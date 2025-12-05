@@ -16,7 +16,7 @@ const Contact = () => {
   };
 
   const handleAddProspect = async (e) => {
-    e.preventDefault(); // منع الفورم من إعادة التحميل
+    e.preventDefault();
     try {
       const res = await publicRequest.post("/prospect", inputs);
       toast.success(res.data.message || "You have been successfully saved to the database.");
@@ -38,7 +38,7 @@ const Contact = () => {
         </p>
 
         <form className="space-y-4" onSubmit={handleAddProspect}>
-          {/* Name */}
+
           <div className="flex items-center border border-gray-300 rounded-xl p-3 focus-within:ring-2 focus-within:ring-red-500">
             <FaUser className="text-red-500 mr-3" />
             <input
@@ -52,7 +52,7 @@ const Contact = () => {
             />
           </div>
 
-          {/* Email */}
+
           <div className="flex items-center border border-gray-300 rounded-xl p-3 focus-within:ring-2 focus-within:ring-red-500">
             <FaEnvelope className="text-red-500 mr-3" />
             <input
@@ -66,7 +66,6 @@ const Contact = () => {
             />
           </div>
 
-          {/* Telephone */}
           <div className="flex items-center border border-gray-300 rounded-xl p-3 focus-within:ring-2 focus-within:ring-red-500">
             <FaPhone className="text-red-500 mr-3" />
             <input
@@ -80,7 +79,6 @@ const Contact = () => {
             />
           </div>
 
-          {/* Address */}
           <div className="flex items-center border border-gray-300 rounded-xl p-3 focus-within:ring-2 focus-within:ring-red-500">
             <FaHome className="text-red-500 mr-3" />
             <input
@@ -94,7 +92,6 @@ const Contact = () => {
             />
           </div>
 
-          {/* Weight */}
           <div className="flex items-center border border-gray-300 rounded-xl p-3 focus-within:ring-2 focus-within:ring-red-500">
             <FaWeight className="text-red-500 mr-3" />
             <input
@@ -108,7 +105,6 @@ const Contact = () => {
             />
           </div>
 
-          {/* Blood Group */}
           <div className="flex items-center border border-gray-300 rounded-xl p-3 focus-within:ring-2 focus-within:ring-red-500">
             <FaTint className="text-red-500 mr-3" />
             <select
@@ -130,7 +126,7 @@ const Contact = () => {
             </select>
           </div>
 
-          {/* Age */}
+
           <div className="flex items-center border border-gray-300 rounded-xl p-3 focus-within:ring-2 focus-within:ring-red-500">
             <FaBirthdayCake className="text-red-500 mr-3" />
             <input
@@ -144,7 +140,7 @@ const Contact = () => {
             />
           </div>
 
-          {/* Diseases */}
+  
           <div className="flex items-start border border-gray-300 rounded-xl p-3 focus-within:ring-2 focus-within:ring-red-500">
             <FaNotesMedical className="text-red-500 mr-3 mt-2" />
             <textarea
@@ -157,7 +153,6 @@ const Contact = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="bg-red-700 text-white w-full py-4 rounded-2xl font-bold shadow-lg hover:bg-red-600 transition duration-300 transform hover:scale-105"

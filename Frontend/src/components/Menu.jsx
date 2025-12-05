@@ -16,7 +16,7 @@ import { logout } from "../redux/userRedux";
 import { persistor } from "../redux/store";
 
 function Menu({ onNavigate }) {
-  // onNavigate optional prop (used if parent wants to close sidebar after navigation)
+  
   const [activeLink, setActiveLink] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -123,7 +123,7 @@ function Menu({ onNavigate }) {
               >
                 <FaBell className="mr-3" /> Notifications
                 {unreadCount > 0 && (
-                  // badge responsive position: uses relative parent and small size on mobile
+                  
                   <span className="ml-2 md:ml-3 inline-flex items-center justify-center text-xs md:text-sm font-bold
                                    bg-red-600 text-white rounded-full h-5 w-5 md:h-6 md:w-6">
                     {unreadCount > 99 ? "99+" : unreadCount}

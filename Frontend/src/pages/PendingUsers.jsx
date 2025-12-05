@@ -27,7 +27,7 @@ const PendingUsers = () => {
 
   const { currentUser } = useSelector((state) => state.user);
 
-  // Fetch pending users
+ 
   const fetchPendingUsers = async () => {
     try {
       setLoading(true);
@@ -71,7 +71,7 @@ const PendingUsers = () => {
     }
   };
 
-  // Reject & Delete User
+
   const handleReject = async (userId) => {
     if (window.confirm("Are you sure you want to reject and delete this account?")) {
       try {
@@ -86,7 +86,7 @@ const PendingUsers = () => {
     }
   };
 
-  // Clear messages after 4 seconds
+
   useEffect(() => {
     if (success || error) {
       const timer = setTimeout(() => {

@@ -7,7 +7,7 @@ function ContactUs() {
     <div className="font-sans">
 
 
-      {/* Hero Section */}
+   
       <section className="bg-[url('/contact_hero.jpg')] bg-cover bg-center h-[50vh] flex items-center justify-center">
         <div className="text-center text-red-700  bg-red-50 bg-opacity-40 p-8 rounded-2xl">
           <h1 className="text-5xl font-extrabold mb-4">Contact Us</h1>
@@ -15,11 +15,10 @@ function ContactUs() {
         </div>
       </section>
 
-      {/* Contact Form & Info */}
       <section className="bg-red-50 py-24 px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
 
-          {/* Contact Form */}
+
           <div className="bg-white p-10 rounded-2xl shadow-xl">
             <h2 className="text-3xl font-bold text-red-700 mb-6">Send Us a Message</h2>
             <form className="space-y-6">
@@ -41,7 +40,7 @@ function ContactUs() {
             </form>
           </div>
 
-          {/* Contact Info */}
+   
           <div className="bg-white p-10 rounded-2xl shadow-xl">
             <h2 className="text-3xl font-bold text-red-700 mb-6">Get in Touch</h2>
             <p className="text-gray-700 mb-4"><strong>Address:</strong> 123 BloodConnect Ave, City, Country</p>
@@ -53,7 +52,6 @@ function ContactUs() {
         </div>
       </section>
 
-      {/* Map Section */}
       <section className="py-12">
         <div className="max-w-6xl mx-auto rounded-2xl overflow-hidden shadow-xl">
           <iframe
@@ -68,7 +66,7 @@ function ContactUs() {
         </div>
       </section>
 
-      {/* Call to Action */}
+
       <section className="bg-red-700 py-24 px-4 text-center text-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-5xl font-extrabold mb-4">Ready to Save a Life?</h2>

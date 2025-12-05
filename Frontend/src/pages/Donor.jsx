@@ -36,7 +36,7 @@ const Donor = () => {
   return (
     <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-br from-red-50 to-white p-6 gap-6">
       
-      {/* Left Card */}
+     
       <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md transform hover:scale-105 transition-transform duration-300">
         <h2 className="text-2xl font-bold text-red-700 text-center mb-6">Donor Information</h2>
         <div className="flex flex-col space-y-4">
@@ -91,7 +91,7 @@ const Donor = () => {
         </div>
       </div>
 
-      {/* Right Card */}
+    
       <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md transform hover:scale-105 transition-transform duration-300">
         <h2 className="text-2xl font-bold text-red-700 text-center mb-6">Medical Info</h2>
         <div className="flex flex-col space-y-4">

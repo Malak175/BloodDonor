@@ -41,16 +41,16 @@ const Login = () => {
         return;
       }
 
-      // Store in localStorage (optional — good for persistence)
+   
       localStorage.setItem("token", data.accessToken);
       localStorage.setItem("user", JSON.stringify(data));
 
-      // Update Redux state
+      
       dispatch(loginSuccess(data));
 
       toast.success("Login successful!");
 
-      // Redirect based on role
+      
       if (data.role === "admin") {
         navigate("/admin", { replace: true });
       } else {

@@ -25,28 +25,28 @@ const Layout = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-50">
-      {/* Mobile header / hamburger */}
+      
       <header className="w-full md:hidden flex items-center justify-between px-4 py-3 bg-white shadow-sm">
         <button
           aria-label="Open menu"
           onClick={() => setSidebarOpen(true)}
           className="p-2 rounded-md focus:outline-none focus:ring"
         >
-          {/* simple hamburger icon */}
+         
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
         <div className="text-lg font-semibold">Dashboard</div>
-        <div /> {/* placeholder to center title */}
+        <div />
       </header>
 
-      {/* Sidebar for md+ screens */}
+     
       <aside className="hidden md:block w-72 bg-white border-r">
         <Menu />
       </aside>
 
-      {/* Mobile off-canvas sidebar */}
+     
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
           <div
@@ -74,7 +74,7 @@ const Layout = () => {
         </div>
       )}
 
-      {/* Main content */}
+     
       <main className="flex-1 p-4 md:p-7 overflow-auto">
         <Outlet />
       </main>

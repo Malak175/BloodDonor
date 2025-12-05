@@ -7,7 +7,7 @@ import { publicRequest } from "../requestMethod";
 const Prospects = () => {
   const [prospects, setProspects] = useState([]);
 
-  // Fetch all prospects on mount
+
   useEffect(() => {
     const getAllProspects = async () => {
       try {
@@ -20,7 +20,7 @@ const Prospects = () => {
     getAllProspects();
   }, []);
 
-  // Delete a prospect
+ 
   const handleDelete = async (id) => {
     try {
       await publicRequest.delete(`/prospect/${id}`);

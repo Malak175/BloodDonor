@@ -30,11 +30,12 @@ return (
       </div>
 
       <div className="mt-8 border-t border-red-600 pt-4 text-center text-gray-700">
-        <p>&copy; 2024 BloodBridge. All rights reserved.</p>
+        <p>&copy; 2025 BloodBridge. All rights reserved.</p>
         <div className="flex justify-center space-x-4 mt-4">
-          <a href="#" className="hover:text-red-600 transition-colors">GitHub</a>
-          <a href="#" className="hover:text-red-600 transition-colors">Twitter</a>
-          <a href="#" className="hover:text-red-600 transition-colors">Facebook</a>
+          <a href="https://github.com/Malak175/BloodDonor.git" className="hover:text-red-600 transition-colors">GitHub</a>
+          <a href="www.linkedin.com/in/malak-zayed-a5674a322" className="hover:text-red-600 transition-colors">Linkedin</a>
+          <a href="https://github.com/omar-khaled67/update-final-project2.git" className="hover:text-red-600 transition-colors">GitHub</a>
+          <a href="https://www.linkedin.com/in/omar-khaled-63b2b2350?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" className="hover:text-red-600 transition-colors">Linkedin</a>
         </div>
       </div>
     </footer>

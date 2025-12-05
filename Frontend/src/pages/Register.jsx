@@ -1,4 +1,3 @@
-// src/pages/Register.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +26,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // تحقق من الحقول
+    
     if (!formData.username || !formData.email || !formData.password || !formData.age) {
       toast.error("Please fill all fields");
       return;
@@ -54,10 +53,9 @@ const Register = () => {
         age: Number(formData.age),
       });
 
-      // نجاح التسجيل
+     
       toast.success("Account created successfully! Redirecting to login...");
       
-      // ننتظر ثانيتين ثم نروح للوجين
       setTimeout(() => {
         navigate("/login");
       }, 2000);
@@ -76,7 +74,7 @@ const Register = () => {
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-white flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2">
 
-          {/* الصورة */}
+          
           <div className="hidden lg:flex items-center justify-center bg-cover bg-center"
             style={{ backgroundImage: "url('/WhatsApp Image 2025-11-01 at 20.08.39_f4d36964.jpg')" }}>
             <div className="bg-black bg-opacity-40 w-full h-full flex items-center justify-center">
@@ -84,7 +82,7 @@ const Register = () => {
             </div>
           </div>
 
-          {/* النموذج */}
+         
           <div className="p-8 lg:p-12">
             <h2 className="text-4xl font-bold text-center text-red-700 mb-8">Create Account</h2>
 
